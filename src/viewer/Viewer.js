@@ -1,8 +1,18 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { loadFolder } from './actions';
+import EmbeddedItem from '../embedded-item/EmbeddedItem';
 
 class Viewer extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+
+  _handleEmbeddedItemClick = item => {
+    const { history } = this.props;
+    history.push(item.path.replace('disk:', ''));
+  };
+
   _renderEmbeddedItems() {
     const { items } = this.props;
     if (!items) {
@@ -10,8 +20,14 @@ class Viewer extends React.Component {
     }
 
     return (
-      <div>
-        {items.map(item => <div>{`${item.name} – ${item.size}`}</div>)}
+      <div className="list-group">
+        {items.map(item => (
+          <EmbeddedItem
+            item={item}
+            key={item.path}
+            onClick={this._handleEmbeddedItemClick}
+          />
+        ))}
       </div>
     );
   }
@@ -34,10 +50,11 @@ class Viewer extends React.Component {
   componentDidMount() {
     const { isLoading, onLoadFolder } = this.props;
     if (!!isLoading) {
-      throw 'isLoading cannot be true here.';
+      throw new Error('isLoading cannot be true here.');
     }
 
-    onLoadFolder('/');
+    const { pathname } = this.props.location;
+    onLoadFolder(pathname);
   }
 }
 
