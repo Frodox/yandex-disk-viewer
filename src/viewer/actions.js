@@ -20,6 +20,9 @@ const setItems = items => ({
   items,
 });
 
+//TODO: Remove setupName
+//TODO: pagination
+//TODO: error page
 export const loadFolder = path => (dispatch, getState) => {
   dispatch(startLoading());
   //TODO: Is it ok to normalize path here?
