@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { loadFolder } from './actions';
+import Breadcrumb from '../breadcrumb/Breadcrumb';
 import EmbeddedItem from '../embedded-item/EmbeddedItem';
 
 class Viewer extends React.Component {
@@ -33,14 +34,12 @@ class Viewer extends React.Component {
   }
 
   render() {
-    const { isLoading, name } = this.props;
+    const { location, isLoading } = this.props;
     let embeddedItems = this._renderEmbeddedItems();
-    let spinner = !isLoading ? null : <div>Spinner</div>;
+    let spinner = !isLoading ? null : <div>Spinner</div>; //TODO: Implement Spinner
     return (
       <div>
-        <div>
-          <p>{name}</p>
-        </div>
+        <Breadcrumb pathname={location.pathname} />
         {embeddedItems}
         {spinner}
       </div>
