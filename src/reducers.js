@@ -1,14 +1,11 @@
 import { combineReducers } from 'redux';
+import { folder } from './viewer/reducers';
 
-function auth(state = {}, action) {
-  switch (action.type) {
-    default: {
-      return state;
-    }
-  }
-}
+const initialAuthState = {
+  token: 'AQAAAAAJ6tSJAAUR-zlOqAhmU00brDIp_0s4SM0',
+};
 
-function folder(state = {}, action) {
+function auth(state = initialAuthState, action) {
   switch (action.type) {
     default: {
       return state;
