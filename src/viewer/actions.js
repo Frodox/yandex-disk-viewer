@@ -8,32 +8,16 @@ const stopLoading = () => ({
   type: STOP_LOADING,
 });
 
-const SETUP_NAME = 'SETUP_NAME';
-const setupName = name => ({
-  type: SETUP_NAME,
-  name,
-});
-
 const SET_ITEMS = 'SET_ITEMS';
 const setItems = items => ({
   type: SET_ITEMS,
   items,
 });
 
-//TODO: Remove setupName
 //TODO: pagination
 //TODO: error page
 export const loadFolder = path => (dispatch, getState) => {
   dispatch(startLoading());
-  //TODO: Is it ok to normalize path here?
-  let name = path
-    .trim()
-    .split('/')
-    .pop();
-  if (0 === name.length) {
-    name = 'Files';
-  }
-  dispatch(setupName(name));
 
   const searchParamFields = ['size', 'type', 'path', 'name']
     .map(item => `_embedded.items.${item}`)
@@ -59,4 +43,4 @@ export const loadFolder = path => (dispatch, getState) => {
     });
 };
 
-export { SET_ITEMS, SETUP_NAME, START_LOADING, STOP_LOADING };
+export { SET_ITEMS, START_LOADING, STOP_LOADING };

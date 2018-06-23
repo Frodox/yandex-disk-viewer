@@ -1,8 +1,7 @@
-import { SET_ITEMS, SETUP_NAME, START_LOADING, STOP_LOADING } from './actions';
+import { SET_ITEMS, START_LOADING, STOP_LOADING } from './actions';
 const initialFolderState = {
   isLoading: false,
   items: null,
-  name: '',
 };
 
 export function folder(state = initialFolderState, action) {
@@ -11,14 +10,7 @@ export function folder(state = initialFolderState, action) {
       const { items } = action;
       return {
         ...state,
-        items
-      };
-    }
-    case SETUP_NAME: {
-      const { name } = action;
-      return {
-        ...state,
-        name,
+        items,
       };
     }
     case START_LOADING: {
