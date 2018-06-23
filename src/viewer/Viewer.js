@@ -5,10 +5,6 @@ import Breadcrumb from '../breadcrumb/Breadcrumb';
 import EmbeddedItem from '../embedded-item/EmbeddedItem';
 
 class Viewer extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-
   _handleEmbeddedItemClick = item => {
     const { history } = this.props;
     history.push(item.path.replace('disk:', ''));
