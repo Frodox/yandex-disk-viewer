@@ -1,4 +1,4 @@
-import { SET_ITEMS, START_LOADING, STOP_LOADING } from './actions';
+import { SET_ERROR, SET_ITEMS, START_LOADING, STOP_LOADING } from './actions';
 const initialFolderState = {
   isLoading: false,
   items: null,
@@ -6,6 +6,13 @@ const initialFolderState = {
 
 export function folder(state = initialFolderState, action) {
   switch (action.type) {
+    case SET_ERROR: {
+      const { error } = action;
+      return {
+        ...state,
+        error,
+      };
+    }
     case SET_ITEMS: {
       const { items } = action;
       return {

@@ -8,6 +8,12 @@ const stopLoading = () => ({
   type: STOP_LOADING,
 });
 
+const SET_ERROR = 'SET_ERROR';
+const setError = error => ({
+  type: SET_ERROR,
+  error,
+});
+
 const SET_ITEMS = 'SET_ITEMS';
 const setItems = items => ({
   type: SET_ITEMS,
@@ -15,7 +21,6 @@ const setItems = items => ({
 });
 
 //TODO: pagination
-//TODO: error page
 export const loadFolder = path => (dispatch, getState) => {
   dispatch(startLoading());
 
@@ -39,8 +44,12 @@ export const loadFolder = path => (dispatch, getState) => {
     .then(response => response.json())
     .then(json => {
       dispatch(stopLoading());
-      dispatch(setItems(json._embedded.items));
+      if (json._embedded) { // 200 OK
+        dispatch(setItems(json._embedded.items));
+      } else {
+        dispatch(setError(json));
+      }
     });
 };
 
-export { SET_ITEMS, START_LOADING, STOP_LOADING };
+export { SET_ERROR, SET_ITEMS, START_LOADING, STOP_LOADING };
