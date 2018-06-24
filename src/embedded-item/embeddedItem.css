@@ -1,6 +1,7 @@
 .viewer__embedded-item {
   display: flex;
   align-items: center;
+  cursor: pointer;
 }
 
 .viewer__embedded-item__info {
