@@ -1,9 +1,5 @@
 import {
-  SET_ERROR,
-  SET_META,
-  SET_PATH,
-  START_LOADING,
-  STOP_LOADING,
+  SET_ERROR, SET_META, SET_PATH, START_LOADING, STOP_LOADING,
 } from './actions';
 
 const initialFolderState = {
@@ -13,7 +9,7 @@ const initialFolderState = {
   total: null,
 };
 
-export function folder(state = initialFolderState, action) {
+export default function folder(state = initialFolderState, action) {
   switch (action.type) {
     case SET_ERROR: {
       const { error } = action;

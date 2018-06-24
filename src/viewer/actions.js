@@ -43,7 +43,7 @@ export const loadFolder = _path => (dispatch, getState) => {
     .map(item => `_embedded.items.${item}`)
     .join(',');
   const searchParams = new URLSearchParams(
-    `path=${_path}&offset=${offset}&fields=${searchParamFields},_embedded.total`
+    `path=${_path}&offset=${offset}&fields=${searchParamFields},_embedded.total`,
   );
   const { token } = getState().auth;
   const fetchInit = {
@@ -52,16 +52,13 @@ export const loadFolder = _path => (dispatch, getState) => {
     }),
     method: 'GET',
   };
-  return fetch(
-    'https://cloud-api.yandex.net/v1/disk/resources?' + searchParams,
-    fetchInit
-  )
+  return fetch(`https://cloud-api.yandex.net/v1/disk/resources?${searchParams}`, fetchInit)
     .then(response => response.json())
-    .then(json => {
+    .then((json) => {
       const { _embedded } = json;
       if (_embedded) {
         // 200 OK
-        const { items, total } = _embedded;
+        const { items, total } = _embedded; // eslint-disable-line no-shadow
         dispatch(setMeta(items, total));
       } else {
         dispatch(setError(json));
@@ -71,4 +68,6 @@ export const loadFolder = _path => (dispatch, getState) => {
     });
 };
 
-export { SET_ERROR, SET_META, SET_PATH, START_LOADING, STOP_LOADING };
+export {
+  SET_ERROR, SET_META, SET_PATH, START_LOADING, STOP_LOADING,
+};

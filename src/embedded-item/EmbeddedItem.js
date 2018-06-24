@@ -1,34 +1,33 @@
 import React from 'react';
 import bytesToSize from '../common/bytesToSize';
 import './embeddedItem.css';
-import ic_folder from './ic_folder.svg';
+import icFolder from './ic_folder.svg';
 
 class EmbeddedItem extends React.Component {
-  _onClick = e => {
+  _onClick = (e) => {
     e.preventDefault();
-    const { onClick } = this.props;
+    const { onClick, item } = this.props;
     if (onClick) {
-      onClick(this.props.item);
+      onClick(item);
     }
   };
 
   render() {
-    const { name, size, type } = this.props.item;
+    const { item } = this.props;
+    const { name, size, type } = item;
 
     let img = null;
     let onClick = null;
     let sizeNode = null;
-    if ('dir' === type) {
-      img = (
-        <img
-          src={ic_folder}
-          alt="folder"
-          className="viewer__embedded-item__file-type-icon"
-        />
-      );
+    if (type === 'dir') {
+      img = <img src={icFolder} alt="folder" className="viewer__embedded-item__file-type-icon" />;
       onClick = this._onClick;
     } else {
-      sizeNode = <div>{bytesToSize(size)}</div>;
+      sizeNode = (
+        <div>
+          {bytesToSize(size)}
+        </div>
+      );
     }
     return (
       <div
@@ -37,7 +36,9 @@ class EmbeddedItem extends React.Component {
       >
         {img}
         <div className="viewer__embedded-item__info">
-          <div>{name}</div>
+          <div>
+            {name}
+          </div>
           {sizeNode}
         </div>
       </div>

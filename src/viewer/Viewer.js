@@ -1,13 +1,22 @@
 import React from 'react';
+import InfiniteScroll from 'react-infinite-scroller';
 import { connect } from 'react-redux';
 import { loadFolder } from './actions';
 import Breadcrumb from '../breadcrumb/Breadcrumb';
 import EmbeddedItem from '../embedded-item/EmbeddedItem';
 import ErrorAlert from '../error-alert/ErrorAlert';
-import InfiniteScroll from 'react-infinite-scroller';
 import Spinner from '../spinner/Spinner';
 
 class Viewer extends React.Component {
+  componentDidMount() {
+    const { isLoading, location, onLoadFolder } = this.props;
+    if (isLoading) {
+      throw new Error('isLoading cannot be true here.');
+    }
+
+    onLoadFolder(location.pathname);
+  }
+
   _hasMore = () => {
     const { isLoading, items, total } = this.props;
     return total > (items || []).length && !isLoading;
@@ -20,7 +29,7 @@ class Viewer extends React.Component {
     }
   };
 
-  _handleEmbeddedItemClick = item => {
+  _handleEmbeddedItemClick = (item) => {
     const { history } = this.props;
     history.push(item.path.replace('disk:', ''));
   };
@@ -34,11 +43,7 @@ class Viewer extends React.Component {
     return (
       <div className="list-group">
         {items.map(item => (
-          <EmbeddedItem
-            item={item}
-            key={item.path}
-            onClick={this._handleEmbeddedItemClick}
-          />
+          <EmbeddedItem item={item} key={item.path} onClick={this._handleEmbeddedItemClick} />
         ))}
       </div>
     );
@@ -62,29 +67,16 @@ class Viewer extends React.Component {
       </div>
     );
   }
-
-  componentDidMount() {
-    const { isLoading, location, onLoadFolder } = this.props;
-    if (!!isLoading) {
-      throw new Error('isLoading cannot be true here.');
-    }
-
-    onLoadFolder(location.pathname);
-  }
 }
 
-const mapStateToProps = state => {
-  return state.folder;
-};
-const mapDispatchToProps = dispatch => {
-  return {
-    onLoadFolder: path => {
-      dispatch(loadFolder(path));
-    },
-  };
-};
+const mapStateToProps = state => state.folder;
+const mapDispatchToProps = dispatch => ({
+  onLoadFolder: (path) => {
+    dispatch(loadFolder(path));
+  },
+});
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps
+  mapDispatchToProps,
 )(Viewer);
