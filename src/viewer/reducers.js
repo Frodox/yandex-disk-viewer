@@ -1,7 +1,16 @@
-import { SET_ERROR, SET_ITEMS, START_LOADING, STOP_LOADING } from './actions';
+import {
+  SET_ERROR,
+  SET_META,
+  SET_PATH,
+  START_LOADING,
+  STOP_LOADING,
+} from './actions';
+
 const initialFolderState = {
   isLoading: false,
   items: null,
+  path: null,
+  total: null,
 };
 
 export function folder(state = initialFolderState, action) {
@@ -13,16 +22,25 @@ export function folder(state = initialFolderState, action) {
         error,
       };
     }
-    case SET_ITEMS: {
-      const { items } = action;
+    case SET_META: {
+      const { items, total } = action;
+      const currentItems = state.items || [];
       return {
         ...state,
-        items,
+        items: currentItems.concat(items),
+        total,
+      };
+    }
+    case SET_PATH: {
+      const { path } = action;
+      return {
+        ...initialFolderState,
+        path,
       };
     }
     case START_LOADING: {
       return {
-        ...initialFolderState,
+        ...state,
         isLoading: true,
       };
     }

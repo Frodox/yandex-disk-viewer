@@ -14,21 +14,36 @@ const setError = error => ({
   error,
 });
 
-const SET_ITEMS = 'SET_ITEMS';
-const setItems = items => ({
-  type: SET_ITEMS,
+const SET_META = 'SET_META';
+const setMeta = (items, total) => ({
+  type: SET_META,
   items,
+  total,
 });
 
-//TODO: pagination
-export const loadFolder = path => (dispatch, getState) => {
+const SET_PATH = 'SET_PATH';
+const setPath = path => ({
+  type: SET_PATH,
+  path,
+});
+
+export const loadFolder = _path => (dispatch, getState) => {
+  const { path } = getState().folder;
+
+  if (_path !== path) {
+    dispatch(setPath(_path));
+  }
+
   dispatch(startLoading());
 
+  // It's important to get items only after setPath call.
+  const { items } = getState().folder;
+  const offset = items ? items.length : 0;
   const searchParamFields = ['size', 'type', 'path', 'name']
     .map(item => `_embedded.items.${item}`)
     .join(',');
   const searchParams = new URLSearchParams(
-    `path=${path}&fields=${searchParamFields}`
+    `path=${_path}&offset=${offset}&fields=${searchParamFields},_embedded.total`
   );
   const { token } = getState().auth;
   const fetchInit = {
@@ -43,13 +58,17 @@ export const loadFolder = path => (dispatch, getState) => {
   )
     .then(response => response.json())
     .then(json => {
-      dispatch(stopLoading());
-      if (json._embedded) { // 200 OK
-        dispatch(setItems(json._embedded.items));
+      const { _embedded } = json;
+      if (_embedded) {
+        // 200 OK
+        const { items, total } = _embedded;
+        dispatch(setMeta(items, total));
       } else {
         dispatch(setError(json));
       }
+
+      dispatch(stopLoading());
     });
 };
 
-export { SET_ERROR, SET_ITEMS, START_LOADING, STOP_LOADING };
+export { SET_ERROR, SET_META, SET_PATH, START_LOADING, STOP_LOADING };
