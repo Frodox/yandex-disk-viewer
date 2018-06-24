@@ -1,8 +1,9 @@
 import { combineReducers } from 'redux';
+import { userToken } from './properties';
 import folder from './viewer/reducers';
 
 const initialAuthState = {
-  token: 'AQAAAAAJ6tSJAAUR-zlOqAhmU00brDIp_0s4SM0',
+  token: userToken,
 };
 
 function auth(state = initialAuthState, action) {
