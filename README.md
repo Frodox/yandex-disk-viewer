@@ -3,7 +3,7 @@
 
 ## Install
 
-1.  `git clone git://github.com/mbelsky/yandex-disk-viewer.git mbelsky-yandex-disk-viewer`
+1.  `git clone git://github.com/mbelsky/yandex-disk-viewer.git mbelsky-yandex-disk-viewer && cd mbelsky-yandex-disk-viewer`
 2.  Run `npm install`
 3.  Get OAuth token [there](https://oauth.yandex.ru/authorize?response_type=token&client_id=a77b04a7a44d4ac08d101cbc1151601d)
 4.  `cp src/properties.js.local src/properties.js`
