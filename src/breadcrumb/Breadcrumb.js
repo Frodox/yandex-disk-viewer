@@ -38,7 +38,7 @@ class Breadcrumb extends React.Component {
   render() {
     return (
       <nav>
-        <ol className="breadcrumb breadcrumb_no-margin">
+        <ol className="breadcrumb viewer__breadcrumb">
           {this._renderItems()}
         </ol>
       </nav>

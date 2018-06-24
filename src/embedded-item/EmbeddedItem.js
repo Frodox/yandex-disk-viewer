@@ -14,27 +14,32 @@ class EmbeddedItem extends React.Component {
 
   render() {
     const { name, size, type } = this.props.item;
-    let content = name;
-    if (size) {
-      content += ` (${bytesToSize(size)})`;
-    }
 
     let img = null;
     let onClick = null;
+    let sizeNode = null;
     if ('dir' === type) {
       img = (
         <img
           src={ic_folder}
           alt="folder"
-          className="embedded-item__file-type-icon"
+          className="viewer__embedded-item__file-type-icon"
         />
       );
       onClick = this._onClick;
+    } else {
+      sizeNode = <div>{bytesToSize(size)}</div>;
     }
     return (
-      <div className="list-group-item list-group-item-action" onClick={onClick}>
+      <div
+        className="list-group-item list-group-item-action viewer__embedded-item"
+        onClick={onClick}
+      >
         {img}
-        {content}
+        <div className="viewer__embedded-item__info">
+          <div>{name}</div>
+          {sizeNode}
+        </div>
       </div>
     );
   }
