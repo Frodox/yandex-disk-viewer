@@ -8,7 +8,6 @@ import { composeWithDevTools } from 'redux-devtools-extension'; // eslint-disabl
 import diskViewerApp from './reducers';
 import './index.css';
 import App from './App';
-import registerServiceWorker from './registerServiceWorker';
 
 const store = createStore(diskViewerApp, composeWithDevTools(applyMiddleware(ReduxThunk)));
 
@@ -20,4 +19,3 @@ ReactDOM.render(
   </Provider>,
   document.getElementById('root'),
 );
-registerServiceWorker();
