@@ -1,5 +1,5 @@
 import { combineReducers } from 'redux';
-import folder from '../viewer/reducers';
+import folder from '../viewer/ViewerReducer';
 
 const initialAuthState = {
   token: process.env.REACT_APP_USER_OAUTH_TOKEN,

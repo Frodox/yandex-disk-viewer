@@ -2,7 +2,7 @@ import React from 'react';
 import InfiniteScroll from 'react-infinite-scroller';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { loadFolder } from './actions';
+import { loadFolder } from './ViewerActions';
 import Alert from '../app/common/Alert';
 import DiskBreadcrumb from './DiskBreadcrumb';
 import EmbeddedItem from './EmbeddedItem';

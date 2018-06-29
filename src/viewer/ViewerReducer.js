@@ -1,6 +1,6 @@
 import {
   SET_ERROR, SET_META, SET_PATH, START_LOADING, STOP_LOADING,
-} from './actions';
+} from './ViewerActions';
 
 const initialFolderState = {
   isLoading: false,
