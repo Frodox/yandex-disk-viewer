@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux';
 import { userToken } from './properties';
-import folder from './viewer/reducers';
+import folder from '../viewer/reducers';
 
 const initialAuthState = {
   token: userToken,
