@@ -2,10 +2,10 @@ import React from 'react';
 import InfiniteScroll from 'react-infinite-scroller';
 import { connect } from 'react-redux';
 import { loadFolder } from './actions';
-import Breadcrumb from '../breadcrumb/Breadcrumb';
+import Alert from '../app/common/Alert';
+import DiskBreadcrumb from './DiskBreadcrumb';
 import EmbeddedItem from '../embedded-item/EmbeddedItem';
-import ErrorAlert from '../error-alert/ErrorAlert';
-import Spinner from '../spinner/Spinner';
+import Spinner from '../app/common/Spinner';
 
 class Viewer extends React.Component {
   componentDidMount() {
@@ -53,8 +53,8 @@ class Viewer extends React.Component {
     const { error, location, isLoading } = this.props;
     return (
       <div>
-        <Breadcrumb pathname={location.pathname} />
-        {error ? <ErrorAlert message={error.message} /> : null}
+        <DiskBreadcrumb pathname={location.pathname} />
+        {!!error && <Alert message={error.message} level="warning" />}
         <InfiniteScroll
           hasMore={this._hasMore()}
           loader={null}
@@ -62,7 +62,7 @@ class Viewer extends React.Component {
           pageStart={0}
         >
           {this._renderEmbeddedItems()}
-          {isLoading ? <Spinner /> : null}
+          {isLoading && <Spinner />}
         </InfiniteScroll>
       </div>
     );
