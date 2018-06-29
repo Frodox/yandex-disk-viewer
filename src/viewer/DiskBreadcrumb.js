@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import Breadcrumb from '../app/common/Breadcrumb';
 
 class DiskBreadcrumb extends React.Component {
@@ -27,5 +28,9 @@ class DiskBreadcrumb extends React.Component {
     return <Breadcrumb items={items} />;
   }
 }
+
+DiskBreadcrumb.propTypes = {
+  pathname: PropTypes.string.isRequired,
+};
 
 export default DiskBreadcrumb;

@@ -38,7 +38,7 @@ export const loadFolder = _path => (dispatch, getState) => {
 
   // It's important to get items only after setPath call.
   const { items } = getState().folder;
-  const offset = items ? items.length : 0;
+  const offset = items.length;
   const searchParamFields = ['size', 'type', 'path', 'name']
     .map(item => `_embedded.items.${item}`)
     .join(',');

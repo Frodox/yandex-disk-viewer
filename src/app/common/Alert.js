@@ -1,6 +1,7 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
-export default function Alert({ message, level = 'primary' }) {
+export default function Alert({ message, level }) {
   const blockClassName = `alert alert-${level} alert-dismissible fade show`;
   return (
     <div className={blockClassName} role="alert">
@@ -11,3 +12,21 @@ export default function Alert({ message, level = 'primary' }) {
     </div>
   );
 }
+
+Alert.propTypes = {
+  message: PropTypes.string.isRequired,
+  level: PropTypes.oneOf([
+    'primary',
+    'secondary',
+    'success',
+    'danger',
+    'warning',
+    'info',
+    'light',
+    'dark',
+  ]),
+};
+
+Alert.defaultProps = {
+  level: 'primary',
+};

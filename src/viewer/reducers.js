@@ -4,9 +4,9 @@ import {
 
 const initialFolderState = {
   isLoading: false,
-  items: null,
+  items: [],
   path: null,
-  total: null,
+  total: 0,
 };
 
 export default function folder(state = initialFolderState, action) {

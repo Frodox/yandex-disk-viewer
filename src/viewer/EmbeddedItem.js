@@ -1,7 +1,9 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import bytesToSize from '../utils/bytesToSize';
 import './EmbeddedItem.css';
 import icFolder from './ic_folder.svg';
+import { fileMetaType } from './types';
 
 class EmbeddedItem extends React.Component {
   _onClick = (e) => {
@@ -33,5 +35,14 @@ class EmbeddedItem extends React.Component {
     );
   }
 }
+
+EmbeddedItem.propTypes = {
+  item: fileMetaType.isRequired,
+  onClick: PropTypes.func,
+};
+
+EmbeddedItem.defaultProps = {
+  onClick: null,
+};
 
 export default EmbeddedItem;

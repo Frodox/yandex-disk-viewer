@@ -1,11 +1,14 @@
 import React from 'react';
 import InfiniteScroll from 'react-infinite-scroller';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 import { loadFolder } from './actions';
 import Alert from '../app/common/Alert';
 import DiskBreadcrumb from './DiskBreadcrumb';
 import EmbeddedItem from './EmbeddedItem';
 import Spinner from '../app/common/Spinner';
+import { routerContextTypes } from '../app/types';
+import { fileMetaType } from './types';
 
 class Viewer extends React.Component {
   componentDidMount() {
@@ -19,7 +22,7 @@ class Viewer extends React.Component {
 
   _hasMore = () => {
     const { isLoading, items, total } = this.props;
-    return total > (items || []).length && !isLoading;
+    return total > items.length && !isLoading;
   };
 
   _onLoadFolder = () => {
@@ -36,9 +39,6 @@ class Viewer extends React.Component {
 
   _renderEmbeddedItems() {
     const { items } = this.props;
-    if (!items) {
-      return null;
-    }
 
     return (
       <div className="list-group">
@@ -68,6 +68,21 @@ class Viewer extends React.Component {
     );
   }
 }
+
+Viewer.propTypes = {
+  ...routerContextTypes,
+  error: PropTypes.shape({
+    message: PropTypes.string,
+  }),
+  isLoading: PropTypes.bool.isRequired,
+  items: PropTypes.arrayOf(fileMetaType).isRequired,
+  onLoadFolder: PropTypes.func.isRequired,
+  total: PropTypes.number.isRequired,
+};
+
+Viewer.defaultProps = {
+  error: null,
+};
 
 const mapStateToProps = state => state.folder;
 const mapDispatchToProps = dispatch => ({
