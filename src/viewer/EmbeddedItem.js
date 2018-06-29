@@ -22,7 +22,7 @@ class EmbeddedItem extends React.Component {
     return (
       <div
         className="list-group-item list-group-item-action viewer__embedded-item"
-        onClick={isDir && this._onClick}
+        onClick={isDir ? this._onClick : null}
       >
         {isDir && (
           <img src={icFolder} alt="folder" className="viewer__embedded-item__file-type-icon" />
