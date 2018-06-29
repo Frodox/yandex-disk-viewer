@@ -24,4 +24,4 @@ chrome-user-data
 *.swp
 *.swo
 
-src/app/properties.js
+.env*.local

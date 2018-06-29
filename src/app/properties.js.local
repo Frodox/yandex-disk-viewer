@@ -1,3 +1,0 @@
-const userToken = 'PASTE YOUR TOKEN HERE';
-
-export { userToken };
