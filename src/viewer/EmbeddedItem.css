@@ -12,9 +12,6 @@
   justify-content: space-between;
 }
 
-.viewer__embedded-item__info > div {
-}
-
 .viewer__embedded-item__file-type-icon {
   margin-right: 0.5rem;
 }

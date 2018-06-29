@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { loadFolder } from './actions';
 import Alert from '../app/common/Alert';
 import DiskBreadcrumb from './DiskBreadcrumb';
-import EmbeddedItem from '../embedded-item/EmbeddedItem';
+import EmbeddedItem from './EmbeddedItem';
 import Spinner from '../app/common/Spinner';
 
 class Viewer extends React.Component {
