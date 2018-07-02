@@ -27,7 +27,7 @@ const setPath = path => ({
   path,
 });
 
-export const loadFolder = _path => (dispatch, getState) => {
+export const loadFolder = _path => async (dispatch, getState) => {
   const { path } = getState().folder;
 
   if (_path !== path) {
@@ -52,20 +52,27 @@ export const loadFolder = _path => (dispatch, getState) => {
     }),
     method: 'GET',
   };
-  return fetch(`https://cloud-api.yandex.net/v1/disk/resources?${searchParams}`, fetchInit)
-    .then(response => response.json())
-    .then((json) => {
-      const { _embedded } = json;
-      if (_embedded) {
-        // 200 OK
-        const { items, total } = _embedded; // eslint-disable-line no-shadow
-        dispatch(setMeta(items, total));
-      } else {
-        dispatch(setError(json));
-      }
 
-      dispatch(stopLoading());
-    });
+  try {
+    const response = await fetch(
+      `https://cloud-api.yandex.net/v1/disk/resources?${searchParams}`,
+      fetchInit,
+    );
+    const json = await response.json();
+    const { _embedded } = json;
+    if (_embedded) {
+      // 200 OK
+      const { items: fileMetaItems, total } = _embedded;
+      dispatch(setMeta(fileMetaItems, total));
+    } else {
+      dispatch(setError(json));
+    }
+  } catch (e) {
+    const { message } = e;
+    dispatch(setError({ message }));
+  }
+
+  dispatch(stopLoading());
 };
 
 export {
