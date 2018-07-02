@@ -1,10 +1,10 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import ReduxThunk from 'redux-thunk';
+import * as React from 'react';
+import * as ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { BrowserRouter as Router } from 'react-router-dom';
-import { createStore, applyMiddleware } from 'redux';
+import { applyMiddleware, createStore } from 'redux';
 import { composeWithDevTools } from 'redux-devtools-extension'; // eslint-disable-line import/no-extraneous-dependencies
+import ReduxThunk from 'redux-thunk';
 import App from './app/App';
 import diskViewerApp from './app/reducers';
 import './index.css';
