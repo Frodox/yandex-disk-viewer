@@ -8,5 +8,23 @@
     "ordered-imports": false,
     "variable-name": [true, "ban-keywords", "check-format", "allow-leading-underscore"]
   },
-  "rules": {}
+  "rules": {
+    "member-ordering": [
+      true,
+      {
+        "order": [
+          {
+            "name": "static non-private",
+            "kinds": [
+              "public-static-field",
+              "protected-static-field",
+              "public-static-method",
+              "protected-static-method"
+            ]
+          },
+          "constructor"
+        ]
+      }
+    ]
+  }
 }
