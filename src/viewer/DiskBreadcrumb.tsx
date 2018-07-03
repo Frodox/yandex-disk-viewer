@@ -1,9 +1,12 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import Breadcrumb from '../app/common/Breadcrumb';
+import * as React from 'react';
+import Breadcrumb, { ICrumbItem } from '../app/common/Breadcrumb';
 
-class DiskBreadcrumb extends React.Component {
-  _buildItems() {
+interface IProps {
+  pathname: string;
+}
+
+class DiskBreadcrumb extends React.Component<IProps> {
+  private buildItems(): ICrumbItem[] {
     let { pathname } = this.props;
     const items = [];
 
@@ -23,14 +26,10 @@ class DiskBreadcrumb extends React.Component {
     return items;
   }
 
-  render() {
-    const items = this._buildItems();
+  public render() {
+    const items = this.buildItems();
     return <Breadcrumb items={items} />;
   }
 }
-
-DiskBreadcrumb.propTypes = {
-  pathname: PropTypes.string.isRequired,
-};
 
 export default DiskBreadcrumb;

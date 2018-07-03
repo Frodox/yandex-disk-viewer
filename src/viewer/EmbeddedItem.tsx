@@ -1,12 +1,16 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import * as React from 'react';
 import bytesToSize from '../utils/bytesToSize';
 import './EmbeddedItem.css';
 import icFolder from './ic_folder.svg';
-import { fileMetaType } from './types';
+import { IFileMeta } from './types';
 
-class EmbeddedItem extends React.Component {
-  _onClick = (e) => {
+interface IProps {
+  readonly item: IFileMeta;
+  readonly onClick?: (item: IFileMeta) => void;
+}
+
+class EmbeddedItem extends React.Component<IProps> {
+  private readonly onClick = (e: any) => {
     e.preventDefault();
     const { onClick, item } = this.props;
     if (onClick) {
@@ -14,7 +18,7 @@ class EmbeddedItem extends React.Component {
     }
   };
 
-  render() {
+  public render() {
     const { item } = this.props;
     const { name, size, type } = item;
 
@@ -22,27 +26,18 @@ class EmbeddedItem extends React.Component {
     return (
       <div
         className="list-group-item list-group-item-action viewer__embedded-item"
-        onClick={isDir ? this._onClick : null}
+        onClick={isDir ? this.onClick : undefined}
       >
         {isDir && (
           <img src={icFolder} alt="folder" className="viewer__embedded-item__file-type-icon" />
         )}
         <div className="viewer__embedded-item__info">
           <div>{name}</div>
-          {!isDir && <div>{bytesToSize(size)}</div>}
+          {!isDir && <div>{bytesToSize(size!)}</div>}
         </div>
       </div>
     );
   }
 }
-
-EmbeddedItem.propTypes = {
-  item: fileMetaType.isRequired,
-  onClick: PropTypes.func,
-};
-
-EmbeddedItem.defaultProps = {
-  onClick: null,
-};
 
 export default EmbeddedItem;

@@ -1,17 +1,24 @@
-import React from 'react';
-import InfiniteScroll from 'react-infinite-scroller';
+import * as React from 'react';
+import * as InfiniteScroll from 'react-infinite-scroller';
 import { connect } from 'react-redux';
-import PropTypes from 'prop-types';
-import { loadFolder } from './ViewerActions';
+import { RouteComponentProps } from 'react-router-dom';
 import Alert from '../app/common/Alert';
+import Spinner from '../app/common/Spinner';
 import DiskBreadcrumb from './DiskBreadcrumb';
 import EmbeddedItem from './EmbeddedItem';
-import Spinner from '../app/common/Spinner';
-import { routerContextTypes } from '../app/types';
-import { fileMetaType } from './types';
+import { loadFolder } from './ViewerActions';
+import { IFileMeta } from './types';
 
-class Viewer extends React.Component {
-  componentDidMount() {
+interface IProps extends RouteComponentProps<any> {
+  readonly error?: { message: string };
+  readonly isLoading: boolean;
+  readonly items: IFileMeta[]; // fileMeta
+  readonly onLoadFolder: (path: string) => void;
+  readonly total: number;
+}
+
+class Viewer extends React.Component<IProps> {
+  public componentDidMount() {
     const { isLoading, location, onLoadFolder } = this.props;
     if (isLoading) {
       throw new Error('isLoading cannot be true here.');
@@ -20,48 +27,48 @@ class Viewer extends React.Component {
     onLoadFolder(location.pathname);
   }
 
-  _hasMore = () => {
+  private hasMore = () => {
     const { isLoading, items, total } = this.props;
     return total > items.length && !isLoading;
   };
 
-  _onLoadFolder = () => {
+  private onLoadFolder = () => {
     const { location, onLoadFolder } = this.props;
-    if (this._hasMore()) {
+    if (this.hasMore()) {
       onLoadFolder(location.pathname);
     }
   };
 
-  _handleEmbeddedItemClick = (item) => {
+  private handleEmbeddedItemClick = (item: any) => {
     const { history } = this.props;
     history.push(item.path.replace('disk:', ''));
   };
 
-  _renderEmbeddedItems() {
+  private renderEmbeddedItems() {
     const { items } = this.props;
 
     return (
       <div className="list-group">
         {items.map(item => (
-          <EmbeddedItem item={item} key={item.path} onClick={this._handleEmbeddedItemClick} />
+          <EmbeddedItem item={item} key={item.path} onClick={this.handleEmbeddedItemClick} />
         ))}
       </div>
     );
   }
 
-  render() {
+  public render() {
     const { error, location, isLoading } = this.props;
     return (
       <div>
         <DiskBreadcrumb pathname={location.pathname} />
         {!!error && <Alert message={error.message} level="warning" />}
         <InfiniteScroll
-          hasMore={this._hasMore()}
-          loader={null}
-          loadMore={this._onLoadFolder}
+          hasMore={this.hasMore()}
+          loader={undefined}
+          loadMore={this.onLoadFolder}
           pageStart={0}
         >
-          {this._renderEmbeddedItems()}
+          {this.renderEmbeddedItems()}
           {isLoading && <Spinner />}
         </InfiniteScroll>
       </div>
@@ -69,24 +76,9 @@ class Viewer extends React.Component {
   }
 }
 
-Viewer.propTypes = {
-  ...routerContextTypes,
-  error: PropTypes.shape({
-    message: PropTypes.string,
-  }),
-  isLoading: PropTypes.bool.isRequired,
-  items: PropTypes.arrayOf(fileMetaType).isRequired,
-  onLoadFolder: PropTypes.func.isRequired,
-  total: PropTypes.number.isRequired,
-};
-
-Viewer.defaultProps = {
-  error: null,
-};
-
-const mapStateToProps = state => state.folder;
-const mapDispatchToProps = dispatch => ({
-  onLoadFolder: (path) => {
+const mapStateToProps = (state: any) => state.folder;
+const mapDispatchToProps = (dispatch: any) => ({
+  onLoadFolder: (path: string) => {
     dispatch(loadFolder(path));
   },
 });

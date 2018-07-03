@@ -1,9 +1,13 @@
-import React from 'react';
+import * as React from 'react';
 import { Link } from 'react-router-dom';
-import PropTypes from 'prop-types';
 import './Breadcrumb.css';
 
-function mapItem(item, index, items) {
+export interface ICrumbItem {
+  name: string;
+  path: string;
+}
+
+function mapItem(item: ICrumbItem, index: number, items: ICrumbItem[]) {
   const isLast = index === items.length - 1;
   return (
     <li className={`breadcrumb-item ${!isLast && 'active'}`} key={item.path}>
@@ -12,23 +16,14 @@ function mapItem(item, index, items) {
   );
 }
 
-export default function Breadcrumb({ items }) {
+interface IProps {
+  items: ICrumbItem[];
+}
+
+export default function Breadcrumb({ items }: IProps) {
   return (
     <nav>
       <ol className="breadcrumb">{items.map(mapItem)}</ol>
     </nav>
   );
 }
-
-Breadcrumb.propTypes = {
-  items: PropTypes.arrayOf(
-    PropTypes.shape({
-      name: PropTypes.string.isRequired,
-      path: PropTypes.string.isRequired,
-    }),
-  ),
-};
-
-Breadcrumb.defaultProps = {
-  items: [],
-};
