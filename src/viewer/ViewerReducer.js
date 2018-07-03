@@ -5,7 +5,6 @@ import {
 const initialFolderState = {
   isLoading: false,
   items: [],
-  path: null,
   total: 0,
 };
 
