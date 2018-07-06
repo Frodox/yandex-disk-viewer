@@ -26,6 +26,7 @@
         ]
       }
     ],
+    "object-literal-sort-keys": [false],
     "ordered-imports": [
       true,
       {

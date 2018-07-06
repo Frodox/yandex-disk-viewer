@@ -4,15 +4,17 @@ import { connect } from 'react-redux';
 import { RouteComponentProps } from 'react-router-dom';
 import Alert from '../app/common/Alert';
 import Spinner from '../app/common/Spinner';
+import { IStoreState } from '../app/types';
 import DiskBreadcrumb from './DiskBreadcrumb';
 import EmbeddedItem from './EmbeddedItem';
 import { loadFolder } from './ViewerActions';
+import { IViewerError } from './types';
 import { IFileMeta } from './types';
 
 interface IProps extends RouteComponentProps<any> {
-  readonly error?: { message: string };
+  readonly error?: IViewerError;
   readonly isLoading: boolean;
-  readonly items: IFileMeta[]; // fileMeta
+  readonly items: IFileMeta[];
   readonly onLoadFolder: (path: string) => void;
   readonly total: number;
 }
@@ -76,7 +78,7 @@ class Viewer extends React.Component<IProps> {
   }
 }
 
-const mapStateToProps = (state: any) => state.folder;
+const mapStateToProps = (state: IStoreState) => state.folder;
 const mapDispatchToProps = (dispatch: any) => ({
   onLoadFolder: (path: string) => {
     dispatch(loadFolder(path));

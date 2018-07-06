@@ -1,14 +1,18 @@
+import { ViewerAction } from './ViewerActions';
 import {
   SET_ERROR, SET_META, SET_PATH, START_LOADING, STOP_LOADING,
-} from './ViewerActions';
+} from './constants';
+import { IFolderState } from './types';
 
-const initialFolderState = {
+const initialFolderState: IFolderState = {
+  error: undefined,
   isLoading: false,
   items: [],
+  path: undefined,
   total: 0,
 };
 
-export default function folder(state = initialFolderState, action) {
+export default function folder(state = initialFolderState, action: ViewerAction): IFolderState {
   switch (action.type) {
     case SET_ERROR: {
       const { error } = action;
