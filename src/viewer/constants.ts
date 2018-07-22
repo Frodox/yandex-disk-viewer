@@ -1,3 +1,6 @@
+export const LOAD_FOLDER = 'LOAD_FOLDER';
+export type LOAD_FOLDER = typeof LOAD_FOLDER;
+
 export const START_LOADING = 'START_LOADING';
 export type START_LOADING = typeof START_LOADING;
 

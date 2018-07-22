@@ -1,7 +1,14 @@
-import { Dispatch } from 'redux';
+import {
+  call, put, select, takeLatest,
+} from 'redux-saga/effects';
 import { IStoreState } from '../app/types';
 import * as C from './constants';
 import { IFileMeta, IViewerError } from './types';
+
+interface ILoadFolder {
+  type: C.LOAD_FOLDER;
+  path: string;
+}
 
 interface IStartLoading {
   type: C.START_LOADING;
@@ -27,11 +34,17 @@ interface ISetPath {
   path: string;
 }
 
-export type LoadFolderAction = (
-  path: string
-) => (dispatch: Dispatch, getState: () => IStoreState) => Promise<void>;
+export type ViewerAction = | ILoadFolder
+  | IStartLoading
+  | IStopLoading
+  | ISetError
+  | ISetMeta
+  | ISetPath;
 
-export type ViewerAction = IStartLoading | IStopLoading | ISetError | ISetMeta | ISetPath;
+export const loadFolder = (path: string): ILoadFolder => ({
+  type: C.LOAD_FOLDER,
+  path,
+});
 
 const startLoading = (): IStartLoading => ({
   type: C.START_LOADING,
@@ -57,25 +70,13 @@ const setPath = (path: string): ISetPath => ({
   path,
 });
 
-export const loadFolder: LoadFolderAction = (path: string) => async (dispatch, getState) => {
-  const { path: currentPath } = getState().folder;
-
-  if (path !== currentPath) {
-    dispatch(setPath(path));
-  }
-
-  dispatch(startLoading());
-
-  // It's important to get items only after setPath call.
-  const { items } = getState().folder;
-  const offset = items.length;
+const getResources = (token: string, path: string, offset: number) => {
   const searchParamFields = ['size', 'type', 'path', 'name']
     .map(item => `_embedded.items.${item}`)
     .join(',');
   const searchParams = new URLSearchParams(
     `path=${path}&offset=${offset}&fields=${searchParamFields},_embedded.total`,
   );
-  const { token } = getState().auth;
   const fetchInit = {
     headers: new Headers({
       Authorization: `OAuth ${token}`,
@@ -83,24 +84,45 @@ export const loadFolder: LoadFolderAction = (path: string) => async (dispatch, g
     method: 'GET',
   };
 
+  return fetch(`https://cloud-api.yandex.net/v1/disk/resources?${searchParams}`, fetchInit);
+};
+
+const getFolder = (state: IStoreState) => state.folder;
+
+const getAuth = (state: IStoreState) => state.auth;
+
+const loadFolderAsync = function* ({ path }: ILoadFolder): any {
+  const { path: currentPath } = yield select(getFolder);
+
+  if (path !== currentPath) {
+    yield put(setPath(path));
+  }
+
+  yield put(startLoading());
+
+  const { token } = yield select(getAuth);
+  // It's important to get items only after setPath call.
+  const { items } = yield select(getFolder);
+  const offset = items.length;
+
   try {
-    const response = await fetch(
-      `https://cloud-api.yandex.net/v1/disk/resources?${searchParams}`,
-      fetchInit,
-    );
-    const json = await response.json();
+    const response = yield call(getResources, token, path, offset);
+    const json = yield call([response, response.json]);
     const { _embedded } = json;
     if (_embedded) {
       // 200 OK
       const { items: fileMetaItems, total } = _embedded;
-      dispatch(setMeta(fileMetaItems, total));
+      yield put(setMeta(fileMetaItems, total));
     } else {
-      dispatch(setError(json));
+      yield put(setError(json));
     }
   } catch (e) {
-    const { message } = e;
-    dispatch(setError({ message }));
+    yield put(setError(e));
   }
 
-  dispatch(stopLoading());
+  yield put(stopLoading());
 };
+
+export default function* mySaga() {
+  yield takeLatest(C.LOAD_FOLDER, loadFolderAsync);
+}
